@@ -1,0 +1,462 @@
+openapi: 3.0.0
+info:
+  title: API de TodoCamisetas
+  version: 1.0.0
+  description: Documentación de la API para el backend de TodoCamisetas
+
+servers:
+  - url: http://localhost/api-todoCamisetas/api/TodoCamisetas/index.php
+
+tags:
+  - name: Clientes
+    description: Operaciones relacionadas con Clientes de TodoCamisetas
+  - name: Camisetas
+    description: Operaciones relacionadas con las camisetas de TodoCamisetas
+  - name: Precio Final
+    description: Operacion de cálculo de precio final para clientes Preferenciales o Regulares
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Token inválido o ausente
+    NotFoundError:
+      description: Recurso no encontrado
+    BadRequest:
+      description: Datos inválidos
+    InternalServerError:
+      description: Error interno del servidor
+    ClienteResponse:
+      description: Cliente encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+    CamisetaResponse:
+      description: Camiseta encontrada
+      content:
+        application/json:
+          schema:
+            type: object
+    PrecioFinalResponse:
+      description: Precio final calculado aplicando el descuento del cliente si corresponde
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              categoria:
+                type: string
+                example: Preferencial
+              precio_final:
+                type: number
+                example: 38250
+              msg:
+                type: string
+                example: Precio final por ser cliente Preferencial
+
+paths:
+  /cliente:
+    get:
+      tags:
+        - Clientes
+      summary: Obtener todos los Clientes disponibles
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/ClienteResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    post:
+      tags:
+        - Clientes
+      summary: Crear un nuevo Cliente
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre_comercial
+                - rut
+                - direccion
+                - categoria
+                - contacto_nombre
+                - contacto_email
+                - porcentaje_oferta
+              properties:
+                nombre_comercial:
+                  type: string
+                  example: ""
+                rut:
+                  type: string
+                  example: ""
+                direccion:
+                  type: string
+                  example: ""
+                categoria:
+                  type: string
+                  example: ""
+                contacto_nombre:
+                  type: string
+                  example: ""
+                contacto_email:
+                  type: string
+                  example: ""
+                porcentaje_oferta:
+                  type: number
+                  example: 0
+      responses:
+        "201":
+          $ref: "#/components/responses/ClienteResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /cliente/{id}:
+    get:
+      tags:
+        - Clientes
+      summary: Obtener un Cliente disponible por su ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          $ref: "#/components/responses/ClienteResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+    put:
+      tags:
+        - Clientes
+      summary: Actualizar un Cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre_comercial
+                - rut
+                - direccion
+                - categoria
+                - contacto_nombre
+                - contacto_email
+                - porcentaje_oferta
+              properties:
+                nombre_comercial:
+                  type: string
+                  example: ""
+                rut:
+                  type: string
+                  example: ""
+                direccion:
+                  type: string
+                  example: ""
+                categoria:
+                  type: string
+                  example: ""
+                contacto_nombre:
+                  type: string
+                  example: ""
+                contacto_email:
+                  type: string
+                  example: ""
+                porcentaje_oferta:
+                  type: number
+                  example: 0
+      responses:
+        "200":
+          $ref: "#/components/responses/ClienteResponse"
+
+    patch:
+      tags:
+        - Clientes
+      summary: Actualizar direccion de un Cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - direccion
+              properties:
+                direccion:
+                  type: string
+                  example: ""
+      responses:
+        "200":
+          $ref: "#/components/responses/ClienteResponse"
+
+    delete:
+      tags:
+        - Clientes
+      summary: Eliminar un Cliente
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cliente eliminado
+
+  /camisetas:
+    get:
+      tags:
+        - Camisetas
+      summary: Obtener todas las camisetas
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          $ref: "#/components/responses/CamisetaResponse"
+
+    post:
+      tags:
+        - Camisetas
+      summary: Crear una nueva camiseta
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titulo
+                - club
+                - pais
+                - tipo
+                - color
+                - precio
+                - detalles
+                - sku
+                - tallas
+              properties:
+                titulo:
+                  type: string
+                  example: ""
+                club:
+                  type: string
+                  example: ""
+                pais:
+                  type: string
+                  example: ""
+                tipo:
+                  type: string
+                  example: ""
+                color:
+                  type: string
+                  example: ""
+                precio:
+                  type: number
+                  format: float
+                  example: null
+                detalles:
+                  type: string
+                  example: ""
+                sku:
+                  type: string
+                  example: ""
+                tallas:
+                  type: array
+                  items:
+                    type: string
+                  example: ["S", "M", "L"]
+      responses:
+        "201":
+          $ref: "#/components/responses/CamisetaResponse"
+
+  /camisetas/{id}:
+    get:
+      tags:
+        - Camisetas
+      summary: Obtener una camiseta por ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          $ref: "#/components/responses/CamisetaResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+    put:
+      tags:
+        - Camisetas
+      summary: Actualizar una camiseta completa
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titulo
+                - club
+                - pais
+                - tipo
+                - color
+                - precio
+                - detalles
+                - sku
+                - tallas
+              properties:
+                titulo:
+                  type: string
+                  example: ""
+                club:
+                  type: string
+                  example: ""
+                pais:
+                  type: string
+                  example: ""
+                tipo:
+                  type: string
+                  example: ""
+                color:
+                  type: string
+                  example: ""
+                precio:
+                  type: number
+                  format: float
+                  example: null
+                detalles:
+                  type: string
+                  example: ""
+                sku:
+                  type: string
+                  example: ""
+                tallas:
+                  type: array
+                  items:
+                    type: string
+                  example: ["M", "L"]
+      responses:
+        "200":
+          $ref: "#/components/responses/CamisetaResponse"
+
+    patch:
+      tags:
+        - Camisetas
+      summary: Actualizar solo el precio de una camiseta
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - precio
+              properties:
+                precio:
+                  type: number
+                  format: float
+                  example: null
+      responses:
+        "200":
+          $ref: "#/components/responses/CamisetaResponse"
+
+    delete:
+      tags:
+        - Camisetas
+      summary: Eliminar una camiseta
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Camiseta eliminada
+
+  /camisetas/{id}/precio-final:
+    get:
+      tags:
+        - Precio Final
+      summary: Obtener el precio final de una camiseta para un cliente Preferencial, o el precio normal si es cliente Regular
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: ID de la camiseta
+          required: true
+          schema:
+            type: integer
+        - name: clienteId
+          in: query
+          description: ID del cliente para calcular descuento
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          $ref: "#/components/responses/PrecioFinalResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundError"

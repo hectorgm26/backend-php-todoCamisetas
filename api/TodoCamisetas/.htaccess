@@ -1,0 +1,15 @@
+# Habilitar motor de reescritura
+RewriteEngine On
+
+# Establecer base de reescritura según tu ruta
+RewriteBase /api/TodoCamisetas/
+
+# Permitir acceso directo a archivos o carpetas existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirigir todas las demás peticiones a index.php, pasando PATH_INFO
+RewriteRule ^(.*)$ index.php/$1 [QSA,L,PT]
+
+# Habilitar AcceptPathInfo (si no está en httpd.conf)
+AcceptPathInfo On
