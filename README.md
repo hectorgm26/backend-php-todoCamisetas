@@ -23,7 +23,7 @@ Este proyecto proporciona la lógica backend para TodoCamisetas, empresa fundada
 │           ├── /Models/        # Modelos PHP que representan las entidades
 │           ├── /Controller/    # Controladores para las operaciones CRUD
 │           └── /Docs/          # Documentación adicional
-│               └── ejemplo_db.txt  # Ejemplo básico de llenado de base de datos
+│               └── ex_back.sql     # Respaldo completo de la base de datos MySQL
 ```
 
 ## Acceso a la documentación
@@ -51,25 +51,67 @@ Desde ahí podrás enviar solicitudes a los endpoints CRUD, ver ejemplos y respu
 - Base de datos MySQL/MariaDB
 - Navegador para Swagger UI o cliente HTTP como Postman
 
+## Configuración de la Base de Datos
+
+El proyecto incluye un archivo `ex_back.sql` en la carpeta `/v1/Docs/` que contiene:
+
+- **Estructura completa de la base de datos**: Todas las tablas necesarias (camisetas, clientes, tallas, camiseta_talla, etc.)
+- **Datos de ejemplo**: Registros de prueba para camisetas y clientes B2B
+- **Relaciones y constraints**: Claves foráneas y restricciones de integridad
+- **Configuración inicial**: Usuarios y permisos básicos
+
+### Importar la base de datos:
+
+1. **Mediante phpMyAdmin**:
+   - Accede a phpMyAdmin
+   - Crea una nueva base de datos (ej: `todocamisetas_db`)
+   - Selecciona la base de datos creada
+   - Ve a la pestaña "Importar"
+   - Selecciona el archivo `ex_back.sql`
+   - Haz clic en "Continuar"
+
+2. **Mediante línea de comandos**:
+   ```bash
+   mysql -u tu_usuario -p nombre_base_datos < /ruta/al/proyecto/v1/Docs/ex_back.sql
+   ```
+
+3. **Mediante herramientas como MySQL Workbench**:
+   - Abre MySQL Workbench
+   - Conecta a tu servidor
+   - Ve a "Server" → "Data Import"
+   - Selecciona "Import from Self-Contained File"
+   - Elige el archivo `ex_back.sql`
+   - Ejecuta la importación
+
 ## Cómo iniciar
 
-1. Clona este repositorio:
+1. **Clona este repositorio:**
    ```bash
    git clone https://github.com/tu_usuario/backend-todocamisetas.git
    ```
 
-2. Configura tu servidor PHP (por ejemplo, XAMPP, WAMP, o PHP built-in server).
+2. **Configura tu servidor PHP** (por ejemplo, XAMPP, WAMP, o PHP built-in server).
 
-3. Configura la base de datos con el script SQL correspondiente.
+3. **Importa la base de datos:**
+   - Localiza el archivo `ex_back.sql` en `/v1/Docs/`
+   - Importa el respaldo completo a tu servidor MySQL/MariaDB
+   - Esto creará automáticamente todas las tablas y datos de ejemplo
 
-4. Ajusta la configuración en `/v1/Config/Conexion.php` para tu entorno.
+4. **Configura la conexión a la base de datos:**
+   - Edita el archivo `/v1/Config/Conexion.php`
+   - Ajusta los parámetros de conexión (host, usuario, contraseña, nombre de BD)
 
-5. Accede a la documentación Swagger para probar la API:
-   ```
-   http://localhost/api-todoCamisetas/api/TodoCamisetas/docs.php
-   ```
+5. **Inicia el servidor:**
+   - Ejecuta tu servidor web o usa el servidor built-in de PHP
+   - Asegúrate de que el proyecto esté accesible desde la raíz configurada
 
-6. Utiliza Swagger UI o Postman para probar las operaciones CRUD definidas.
+6. **Prueba la API:**
+   - Accede a la documentación Swagger:
+     ```
+     http://localhost/api-todoCamisetas/api/TodoCamisetas/docs.php
+     ```
+   - Utiliza Swagger UI o Postman para probar las operaciones CRUD
+   - Usa el token Bearer 'ipss' para autorización
 
 ## Arquitectura del Sistema
 
